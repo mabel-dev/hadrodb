@@ -1,3 +1,2 @@
-from .engine import HadroDB
-
-from opteryx.version import __version__, __author__
+from hadrodb.engine import HadroDB
+from hadrodb.version import __version__, __author__
