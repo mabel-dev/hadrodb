@@ -138,15 +138,15 @@ class HadroDB:
         # 3. Update KeyDir with the KeyEntry of this key
         timestamp: int = int(time.time())
         key = format_key(key)
-        sz, data = encode_kv(timestamp=timestamp, key=key, value=value)
+        size, data = encode_kv(timestamp=timestamp, key=key, value=value)
         # notice we don't do file seek while writing
         self._write(data)
         kv: KeyEntry = KeyEntry(
-            timestamp=timestamp, position=self.write_position, total_size=sz
+            timestamp=timestamp, position=self.write_position, total_size=size
         )
         self.key_dir[key] = kv
         # update last write position, so that next record can be written from this point
-        self.write_position += sz
+        self.write_position += size
 
     def add(self, value: typing.Any) -> bytes:
         """
@@ -178,14 +178,14 @@ class HadroDB:
         #    KeyEntry.position from the disk
         # 4. Decode the bytes into valid KV pair and return the value
         key = format_key(key)
-        kv: typing.Optional[KeyEntry] = self.key_dir.get(key)
-        if kv is None:
+        record: typing.Optional[KeyEntry] = self.key_dir.get(key)
+        if record is None:
             if default is not None:
                 return default
             raise IndexError(key)
         #  move the current pointer to the right offset
-        self.file.seek(kv.position, DEFAULT_WHENCE)
-        data: bytes = self.file.read(kv.total_size)
+        self.file.seek(record.position, DEFAULT_WHENCE)
+        data: bytes = self.file.read(record.total_size)
         _, _, value = decode_kv(data)
         return value
 
