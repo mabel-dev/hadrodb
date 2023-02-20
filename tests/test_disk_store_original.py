@@ -49,6 +49,15 @@ def test_get():
     store = HadroDB(collection=TEMP_FOLDER)
     store.set("name", "jojo")
     assert store.get("name") == "jojo"
+    assert store.get("age", 1) == 1
+    store.close()
+
+
+def test_add():
+    store = HadroDB(collection=TEMP_FOLDER)
+    k = store.add("jojo")
+    assert store.get(k) == "jojo"
+    assert store[k] == "jojo"
     store.close()
 
 
@@ -139,6 +148,7 @@ if __name__ == "__main__":  # pragma: no cover
     test_deletion()
     test_dict_api()
     test_get()
+    test_add()
     test_get_new_file()
     test_invalid_key()
     test_persistence()
