@@ -34,7 +34,7 @@ import random
 import struct
 import typing
 
-import msgpack
+from ormsgpack import packb, unpackb
 from cityhash import CityHash32, CityHash64
 
 # Our key value pair, when stored on disk looks like this:
@@ -113,9 +113,10 @@ def format_key(key: typing.Union[bytes, str]) -> bytes:
 
     if len(key) != 16:
         # We want a 96 bit hash, but CityHash doesn't support
+        # Adding a 64 + 32 is faster then 3 x 32 or 2 x 64 or 1 x 128
         bits64 = CityHash64(key)
         bits32 = CityHash32(key)
-        key = struct.pack("<Q", bits64) + struct.pack("<L", bits32)
+        key = struct.pack("<QL", bits64, bits32)
         return base64.b64encode(key)
 
     return key
@@ -139,7 +140,7 @@ def encode_kv(
     Raises:
         struct.error when parameters don't match the specific type / size
     """
-    binary_data = msgpack.packb(value)
+    binary_data = packb(value)
     header: bytes = struct.pack(HEADER_FORMAT, timestamp, len(key), len(binary_data))
     data: bytes = key + binary_data
     return HEADER_SIZE + len(data), header + data
@@ -168,7 +169,7 @@ def decode_kv(data: bytes) -> typing.Tuple[int, bytes, bytes]:
     key_bytes: bytes = data[HEADER_SIZE : HEADER_SIZE + key_size]
     value_bytes: bytes = data[HEADER_SIZE + key_size :]
     key: bytes = key_bytes
-    value: bytes = msgpack.unpackb(value_bytes)
+    value: bytes = unpackb(value_bytes)
     return timestamp, key, value
 
 
