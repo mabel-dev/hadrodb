@@ -1,10 +1,9 @@
 import os
 import shutil
-import typing
-import pytest
-
-import os
 import sys
+import typing
+
+import pytest
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
 

@@ -23,17 +23,9 @@ import os.path
 import time
 import typing
 
-from .record import (
-    KeyEntry,
-    encode_kv,
-    decode_kv,
-    HEADER_SIZE,
-    decode_header,
-    format_key,
-    random_string,
-)
-from .config import ConsistencyMode, WRITE_CONSISTENCY
-
+from .config import WRITE_CONSISTENCY, ConsistencyMode
+from .record import (HEADER_SIZE, KeyEntry, decode_header, decode_kv,
+                     encode_kv, format_key, random_string)
 
 # We use `file.seek` method to move our cursor to certain byte offset for read
 # or write operations. The method takes two parameters file.seek(offset, whence).
