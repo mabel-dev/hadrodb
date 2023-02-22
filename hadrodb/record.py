@@ -34,8 +34,8 @@ import random
 import struct
 import typing
 
-from ormsgpack import packb, unpackb
 from cityhash import CityHash32, CityHash64
+from ormsgpack import packb, unpackb
 
 # Our key value pair, when stored on disk looks like this:
 #   ┌───────────┬──────────┬────────────┬─────┬───────┐
