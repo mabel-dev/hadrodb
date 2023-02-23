@@ -4,8 +4,9 @@
 [![codecov](https://codecov.io/gh/mabel-dev/hadrodb/branch/main/graph/badge.svg?token=nl9JwOVdPs)](https://codecov.io/gh/mabel-dev/hadrodb)
 [![Downloads](https://static.pepy.tech/badge/hadrodb)](https://pepy.tech/project/hadrodb)
 
-HadroDB is based on [CaskDB](https://github.com/avinassh/py-caskdb) which is based on [Bitcask](https://riak.com/assets/bitcask-intro.pdf).
+HadroDB is a Document Store, being developed as a data store for [Opteryx](https://opteryx.dev).
 
+HadroDB is based on [CaskDB](https://github.com/avinassh/py-caskdb) which is based on [Bitcask](https://riak.com/assets/bitcask-intro.pdf).
 
 ## License
 
@@ -20,5 +21,8 @@ HadroDB is in alpha. Alpha means different things to different people, to us, be
 
 - Interfaces may be significantly changed
 - The data file format is unstable
-- Key functionality is missing
-- Bugs probably exist which make this system unsuitable for any business use
+- Expected functionality is missing
+- Things that worked yesterday, don't work today
+- The results of the system may be unreliable
+
+As such, we really don't recommend using HadroDB anywhere where your data matters.
