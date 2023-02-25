@@ -7,7 +7,10 @@ import uuid
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from hadrodb.record import HEADER_SIZE, KeyEntry, decode_kv, encode_kv
+from hadrodb.record import HEADER_SIZE
+from hadrodb.record import KeyEntry
+from hadrodb.record import decode_kv
+from hadrodb.record import encode_kv
 
 
 def get_random_header() -> typing.Tuple[int, int, int]:

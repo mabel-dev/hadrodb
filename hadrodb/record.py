@@ -34,8 +34,10 @@ import random
 import struct
 import typing
 
-from cityhash import CityHash32, CityHash64
-from ormsgpack import packb, unpackb
+from cityhash import CityHash32
+from cityhash import CityHash64
+from ormsgpack import packb
+from ormsgpack import unpackb
 
 # Our key value pair, when stored on disk looks like this:
 #   ┌───────────┬──────────┬────────────┬─────┬───────┐
@@ -122,9 +124,7 @@ def format_key(key: typing.Union[bytes, str]) -> bytes:
     return key
 
 
-def encode_kv(
-    timestamp: int, key: bytes, value: typing.Any
-) -> typing.Tuple[int, bytes]:
+def encode_kv(timestamp: int, key: bytes, value: typing.Any) -> typing.Tuple[int, bytes]:
     """
     encode_kv encodes the KV pair into bytes
 
