@@ -1,15 +1,4 @@
 """
-disk_store module implements DiskStorage class which implements the KV store on the
-disk
-
-DiskStorage provides two simple operations to get and set key value pairs. Both key
-and value need to be of string type, and all the data is persisted to disk.
-During startup, DiskStorage loads all the existing KV pair metadata, and it will
-throw an error if the file is invalid or corrupt.
-
-Note that if the database file is large, the initialisation will take time
-accordingly. The initialisation is also a blocking operation; till it is completed,
-we cannot use the database.
 
 Typical usage example:
 
@@ -23,21 +12,17 @@ import os.path
 import time
 import typing
 
-from .config import WRITE_CONSISTENCY, ConsistencyMode
-from .record import (HEADER_SIZE, KeyEntry, decode_header, decode_kv,
-                     encode_kv, format_key, random_string)
+from .config import WRITE_CONSISTENCY
+from .config import ConsistencyMode
+from .record import HEADER_SIZE
+from .record import KeyEntry
+from .record import decode_header
+from .record import decode_kv
+from .record import encode_kv
+from .record import format_key
+from .record import random_string
 
-# We use `file.seek` method to move our cursor to certain byte offset for read
-# or write operations. The method takes two parameters file.seek(offset, whence).
-# The offset says the byte offset and whence says the direction:
-#
-# whence 0 - beginning of the file
-# whence 1 - current cursor position
-# whence 2 - end of the file
-#
-# read more about it here:
-# https://docs.python.org/3.7/tutorial/inputoutput.html#methods-of-file-objects
-DEFAULT_WHENCE: typing.Final[int] = 0
+DEFAULT_WHENCE: typing.Final[int] = 0  # beginning of the file
 
 
 # DiskStorage is a Log-Structured Hash Table as described in the BitCask paper. We
@@ -133,9 +118,7 @@ class HadroDB:
         size, data = encode_kv(timestamp=timestamp, key=key, value=value)
         # notice we don't do file seek while writing
         self._write(data)
-        kv: KeyEntry = KeyEntry(
-            timestamp=timestamp, position=self.write_position, total_size=size
-        )
+        kv: KeyEntry = KeyEntry(timestamp=timestamp, position=self.write_position, total_size=size)
         self.key_dir[key] = kv
         # update last write position, so that next record can be written from this point
         self.write_position += size
@@ -228,6 +211,9 @@ class HadroDB:
         #                print(f"loaded k={key}, v={value}")
         print("****----------initialisation complete----------****")
 
+    def keys(self) -> typing.Tuple[bytes]:
+        return tuple(self.key_dir.keys())
+
     def close(self) -> None:
         # before we close the file, we need to safely write the contents in the buffers
         # to the disk. Check documentation of DiskStorage._write() to understand
@@ -239,8 +225,14 @@ class HadroDB:
     def __setitem__(self, key: typing.Union[bytes, str], value: typing.Any) -> None:
         return self.set(key, value)
 
-    def __getitem__(self, item: typing.Union[bytes, str]) -> typing.Any:
+    def __getitem__(self, item: typing.Union[bytes, str, typing.Iterable]) -> typing.Any:
+        if isinstance(item, (list, set, tuple, typing.KeysView)):
+            list_of_docs = []
+            for individual_key in item:
+                this_doc = self.get(individual_key)
+                list_of_docs.append(this_doc)
+            return list_of_docs
         return self.get(item)
 
-    def keys(self) -> typing.List[bytes]:
-        return list(self.key_dir.keys())
+    def __len__(self):
+        return len(self.key_dir)
