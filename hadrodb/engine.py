@@ -232,7 +232,8 @@ class HadroDB:
                 this_doc = self.get(individual_key)
                 list_of_docs.append(this_doc)
             return list_of_docs
-        return self.get(item)  # type:ignore (we've dealt with the iterables)
+        # ignore the typing error, we've dealt with the iterables above
+        return self.get(item)  # type:ignore
 
     def __len__(self):
         return len(self.key_dir)
