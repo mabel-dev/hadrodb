@@ -15,7 +15,7 @@ import typing
 from .config import WRITE_CONSISTENCY
 from .config import ConsistencyMode
 from .record import HEADER_SIZE
-from .record import KeyEntry
+from .record import Row
 from .record import decode_header
 from .record import decode_kv
 from .record import encode_kv
@@ -79,9 +79,10 @@ class HadroDB:
 
         logging.warning("HadroDB is experimental and not recommended for use.")
         self.collection: str = collection
-        self.file_name: str = collection + "/00000000.hadro"
+        self.file_name: str = collection + "/00000000.data"
+        self._schema_file: str = collection + "/00000000.schema"
         self.write_position: int = 0
-        self.key_dir: dict[bytes, KeyEntry] = {}
+        self.key_dir: dict[bytes, Row] = {}
 
         if collection is None:
             raise ValueError("HadroDB requires a collection name")
@@ -93,6 +94,9 @@ class HadroDB:
             self._init_key_dir()
         else:
             os.makedirs(collection, exist_ok=True)
+
+        if os.path.exists(self._schema_file):
+            load the schema
 
         # we open the file in `a+b` mode:
         # a - says the writes are append only. `a+` means we want append and read
@@ -113,6 +117,9 @@ class HadroDB:
         # 1. Encode the KV into bytes
         # 2. Write the bytes to disk by appending to the file
         # 3. Update KeyDir with the KeyEntry of this key
+
+        we can't set records until we have a schema
+
         timestamp: int = int(time.time())
         key = format_key(key)
         size, data = encode_kv(timestamp=timestamp, key=key, value=value)
