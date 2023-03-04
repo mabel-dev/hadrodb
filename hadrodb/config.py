@@ -21,4 +21,4 @@ class ConsistencyMode(int, Enum):
     RELAXED = auto()
 
 
-WRITE_CONSISTENCY: ConsistencyMode = ConsistencyMode.AGGRESSIVE
+WRITE_CONSISTENCY: ConsistencyMode = ConsistencyMode.RELAXED

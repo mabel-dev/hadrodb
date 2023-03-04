@@ -5,12 +5,12 @@ import time
 import typing
 import uuid
 
-sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
 from hadrodb.record import HEADER_SIZE
 from hadrodb.record import KeyEntry
 from hadrodb.record import decode_kv
 from hadrodb.record import encode_kv
+
+sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 
 def get_random_header() -> typing.Tuple[int, int, int]:

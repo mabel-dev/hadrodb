@@ -5,9 +5,10 @@ import typing
 
 import pytest
 
+from hadrodb import HadroDB
+
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from hadrodb import HadroDB
 
 TEMP_FOLDER: str = "temp/cask"
 

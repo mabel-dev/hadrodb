@@ -4,10 +4,12 @@ class Field:
         self.ftype = ftype
         self.nullable = nullable
 
+
 class Index:
     def __init__(self, name, fields):
         self.name = name
         self.fields = fields
+
 
 class TableSchema:
     def __init__(self, fields=None, primary_key=None, indexes=None):
