@@ -1,6 +1,6 @@
 <div align="center">
 
-![HadroDB](https://raw.githubusercontent.com/mabel-dev/hadro/main/hadro.png)
+![HadroDB](https://raw.githubusercontent.com/mabel-dev/hadrodb/main/hadro.png)
 
 HadroDB is a database storage engine for [Opteryx](https://opteryx.dev).
 
