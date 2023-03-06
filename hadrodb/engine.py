@@ -186,44 +186,6 @@ class HadroDB:
             # are actually persisted to the disk
             os.fsync(self.fileno)
 
-    def _init_key_dir(self) -> None:
-        # we will initialise the key_dir by reading the contents of the file, record by
-        # record. As we read each record, we will also update our KeyDir with the
-        # corresponding KeyEntry
-        #
-        # NOTE: this method is a blocking one, if the DB size is huge then it will take
-        # a lot of time to startup
-
-        """
-        # TODO
-        - Load the primary.key file, this is a B-TREE
-        - Hash the data file
-        - this primary.key file has a hash of the data file
-        - if the hashes match, just use the BTREE as the index
-        - if the hashes don't match, rebuild the BTREE from scratch
-        """
-
-        print("****----------initialising the database----------****")
-        with open(self.file_name, "rb") as f:
-            while header_bytes := f.read(HEADER_SIZE):
-                timestamp, key_size, value_size = decode_header(data=header_bytes)
-                key = f.read(key_size)
-                value_bytes = f.read(value_size)  # we don't use this value but read it
-                # value = value_bytes.decode("utf-8")
-                total_size = HEADER_SIZE + key_size + value_size
-                kv = KeyEntry(
-                    timestamp=timestamp,
-                    position=self.write_position,
-                    total_size=total_size,
-                )
-                self.key_dir[key] = kv
-                self.write_position += total_size
-        #                print(f"loaded k={key}, v={value}")
-        print("****----------initialisation complete----------****")
-
-    def keys(self) -> typing.Tuple[bytes, ...]:
-        return tuple(self.key_dir.keys())
-
     def close(self) -> None:
         # before we close the file, we need to safely write the contents in the buffers
         # to the disk. Check documentation of DiskStorage._write() to understand
@@ -231,19 +193,3 @@ class HadroDB:
         self.file.flush()
         os.fsync(self.fileno)
         self.file.close()
-
-    def __setitem__(self, key: typing.Union[bytes, str], value: typing.Any) -> None:
-        return self.set(key, value)
-
-    def __getitem__(self, item: typing.Union[bytes, str, typing.Iterable]) -> typing.Any:
-        if isinstance(item, (list, set, tuple, typing.KeysView)):
-            list_of_docs = []
-            for individual_key in item:
-                this_doc = self.get(individual_key)
-                list_of_docs.append(this_doc)
-            return list_of_docs
-        # ignore the typing error, we've dealt with the iterables above
-        return self.get(item)  # type:ignore
-
-    def __len__(self):
-        return len(self.key_dir)

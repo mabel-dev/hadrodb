@@ -14,13 +14,16 @@ from ormsgpack import packb
 from ormsgpack import unpackb
 
 
-def table_to_tuples(table):
-    # Get the schema and columns from the table
-    schema = table.schema
-    columns = [table.column(i) for i in schema.names]
-    # Create a list of tuples from the columns
-    rows = [tuple(col[i].as_py() for col in columns) for i in range(table.num_rows)]
-    return rows
+def extract_columns(table, columns):
+    # Initialize empty lists for each column
+    result = tuple([] for _ in columns)
+
+    # Extract the specified columns into the result lists
+    for row in table:
+        for j, column in enumerate(columns):
+            result[j].append(row[column])
+
+    return result
 
 
 class Row(tuple):
@@ -28,8 +31,6 @@ class Row(tuple):
     _fields = []
 
     def __new__(cls, data):
-        # if cls._schema:
-        #    check_tuple_schema(data, cls._schema)
         return super().__new__(cls, data)
 
     @property
@@ -39,6 +40,9 @@ class Row(tuple):
     @property
     def values(self):
         return tuple(self)
+
+    def keys(self):
+        return self._fields
 
     def __repr__(self):
         return f"Row{super().__repr__()}"
@@ -54,8 +58,8 @@ class Row(tuple):
 
     @classmethod
     def from_bytes(cls, data: bytes) -> tuple:
-        fields = unpackb(data)
-        return cls(fields)
+        unpacked_values = unpackb(data)
+        return cls(unpacked_values)
 
     def to_bytes(self) -> bytes:
         record_bytes = packb(tuple(self))

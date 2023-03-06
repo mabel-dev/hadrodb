@@ -1,12 +1,14 @@
-# HadroDB
+<div align="center">
+
+![Orso](https://raw.githubusercontent.com/mabel-dev/hadro/main/hadro.png)
+
+HadroDB is a database storage engine for [Opteryx](https://opteryx.dev).
 
 [![PyPI Latest Release](https://img.shields.io/pypi/v/hadrodb.svg)](https://pypi.org/project/hadrodb/)
 [![codecov](https://codecov.io/gh/mabel-dev/hadrodb/branch/main/graph/badge.svg?token=nl9JwOVdPs)](https://codecov.io/gh/mabel-dev/hadrodb)
 [![Downloads](https://static.pepy.tech/badge/hadrodb)](https://pepy.tech/project/hadrodb)
 
-HadroDB is a Document Store, being developed as a data store for [Opteryx](https://opteryx.dev).
-
-HadroDB is based on [CaskDB](https://github.com/avinassh/py-caskdb) which is based on [Bitcask](https://riak.com/assets/bitcask-intro.pdf).
+</div>
 
 ## License
 
