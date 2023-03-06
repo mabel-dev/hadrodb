@@ -2,10 +2,11 @@ import os
 import shutil
 import sys
 
-sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
 from hadrodb import HadroDB
 from hadrodb.record import random_string
+
+sys.path.insert(1, os.path.join(sys.path[0], ".."))
+
 
 TEST_COLLECTION = "test_123"
 
