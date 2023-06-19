@@ -4,6 +4,7 @@ import sys
 import time
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
+sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
 from hadro import HadroDB  # isort: skip
 

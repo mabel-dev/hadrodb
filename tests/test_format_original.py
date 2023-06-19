@@ -6,6 +6,7 @@ import typing
 import uuid
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
+sys.path.insert(1, os.path.join(sys.path[0], "../.."))
 
 from hadrodb.record import HEADER_SIZE
 from hadrodb.record import KeyEntry
