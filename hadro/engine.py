@@ -11,13 +11,17 @@ Typical usage example:
 import io
 import os.path
 import struct
-import time
 import typing
 from collections import namedtuple
 
-from .config import WRITE_CONSISTENCY
-from .config import ConsistencyMode
-from .record import Row
+from hadro.config import WRITE_CONSISTENCY
+from hadro.config import ConsistencyMode
+from orso import logging
+from orso.row import Row
+
+logging.set_log_name("MESOS")
+logger = logging.get_logger()
+logger.setLevel(5)
 
 DELETED_FLAG: int = 1
 
@@ -74,9 +78,7 @@ class HadroDB:
     """
 
     def __init__(self, collection: typing.Union[str, None] = None):
-        import logging
-
-        logging.warning("HadroDB is experimental and not recommended for use.")
+        logger.warning("HadroDB is experimental and not recommended for use.")
         self.collection: str = collection
         self.file_name: str = collection + "/00000000.data"
         self._schema_file: str = collection + "/00000000.schema"
