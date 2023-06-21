@@ -28,7 +28,7 @@ class TableSchema:
         else:
             name = name_or_field
             field = Field(name, field_type, nullable)
-        self.fields[name] = field
+        self._fields[name] = field
 
     def remove_field(self, name):
         if name in self._fields:
