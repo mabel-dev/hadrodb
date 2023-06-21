@@ -145,12 +145,12 @@ def test_get_new_file() -> None:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    #test_deletion()
-    #test_dict_api()
-    #test_get()
-    #test_add()
-    #test_get_new_file()
-    #test_invalid_key()
-    #test_persistence()
+    # test_deletion()
+    # test_dict_api()
+    # test_get()
+    # test_add()
+    # test_get_new_file()
+    # test_invalid_key()
+    # test_persistence()
 
     print("okay")

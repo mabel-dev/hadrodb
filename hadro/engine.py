@@ -142,7 +142,7 @@ class HadroDB:
 
         # TODO: read file header
 
-        buffer = io.BufferedReader(self.file, block_size)
+        buffer = io.BufferedReader(self.file, block_size)  # type: ignore ("BinaryIO" != "RawIOBase")
 
         header_bytes = buffer.read(5)
         flags, size = struct.unpack(">BI", header_bytes)
