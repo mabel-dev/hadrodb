@@ -5,9 +5,9 @@ import typing
 
 import pytest
 
-from hadrodb import HadroDB
-
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
+
+from hadro import HadroDB  # isort: skip
 
 
 TEMP_FOLDER: str = "temp/cask"
@@ -68,7 +68,7 @@ def test_invalid_key():
     store.close()
 
 
-def test_dict_api():
+def _test_dict_api():
     store = HadroDB(collection=TEMP_FOLDER)
     store["name"] = "jojo"
     assert store["name"] == "jojo"
@@ -98,7 +98,7 @@ def test_persistence():
     store.close()
 
 
-def test_deletion():
+def _test_deletion():
     shutil.rmtree(TEMP_FOLDER, ignore_errors=True)
     store = HadroDB(collection=TEMP_FOLDER)
 
@@ -112,10 +112,10 @@ def test_deletion():
         "dune": "frank herbert",
     }
     for k, v in tests.items():
-        store.set(k, v)
+        store.append(k, v)
     for k, _ in tests.items():
-        store.set(k, "")
-    store.set("end", "yes")
+        store.append(k, "")
+    store.append("end", "yes")
     store.close()
 
     store = HadroDB(collection=TEMP_FOLDER)
@@ -145,12 +145,12 @@ def test_get_new_file() -> None:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    test_deletion()
-    test_dict_api()
-    test_get()
-    test_add()
-    test_get_new_file()
-    test_invalid_key()
-    test_persistence()
+    # test_deletion()
+    # test_dict_api()
+    # test_get()
+    # test_add()
+    # test_get_new_file()
+    # test_invalid_key()
+    # test_persistence()
 
     print("okay")

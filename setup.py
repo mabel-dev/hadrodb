@@ -1,7 +1,7 @@
 from setuptools import find_packages
 from setuptools import setup
 
-LIBRARY = "hadrodb"
+LIBRARY = "hadro"
 
 
 __version__ = "notset"
@@ -23,7 +23,7 @@ except:
 setup_config = {
     "name": LIBRARY,
     "version": __version__,
-    "description": "KV Store",
+    "description": "Storage Engine",
     "long_description": long_description,
     "long_description_content_type": "text/markdown",
     "maintainer": "@joocer",
